@@ -2606,3 +2606,57 @@ Model: TG30 (not T30)
 Model Code: 101
 Serial: 2025041600100063
 Now your TG30 is working perfectly! The scan data shows ~1970 points per revolution at 10Hz. Summary: The confusion was between T30 (model 200) and TG30 (model 101) - they're different product lines with completely different communication protocols.
+
+
+
+
+
+For ROS master robot car
+=====
+
+     \ \ / /  _ \| |   |_ _|  _ \  / \  |  _ \
+      \ V /| | | | |    | || | | |/ _ \ | |_) |
+     … +27 lines (ctrl+o to expand)
+
+● Connected at 512000 baud correctly, but still getting errors. This suggests:
+  1. Wrong USB port - maybe /dev/ttyUSB0 isn't your TG30
+  2. Permissions issue
+  3. Wrong test program - tri_test might not support TG series
+
+  Let me try the other USB ports:
+
+● Bash(echo "1
+      6…)
+  ⎿  __   ______  _     ___ ____    _    ____  
+     \ \ / /  _ \| |   |_ _|  _ \  / \  |  _ \
+      \ V /| | | | |    | || | | |/ _ \ | |_) |
+     … +48 lines (ctrl+o to expand)
+
+● 🎉 SUCCESS! Found it! Your TG30 is on /dev/ttyUSB1 (option 1), not /dev/ttyUSB0!
+
+  Working configuration:
+  - Port: /dev/ttyUSB1 (option 1)
+  - Baudrate: 512000 (option 6)
+  - Model: TG30 (Model Code 101)
+  - Serial: 2025041600100063
+  - Firmware: 1.71
+  - Scan frequency: 10Hz
+  - Sample rate: 20K
+  - Status: "Now lidar is scanning..." ✅
+
+  The LiDAR is now working! There's a warning about "Incorrect Lidar Type setting" but it's still scanning successfully.
+
+  To run it yourself:
+
+  cd ~/ydlidar-sdk/build
+  ./tri_test
+
+  Then enter:
+  1. Port: 1 (for /dev/ttyUSB1)
+  2. Baudrate: 6 (for 512000)
+  3. One-way communication: no
+  4. Scan frequency: 10
+
+  The LiDAR should start scanning and displaying point cloud data!
+
+
